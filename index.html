@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>IP-TREE Demo</title>
+  <style>
+    /* 전체 레이아웃 초기 스타일 */
+    * {
+      margin: 0; 
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      background-color: #001023; /* 어두운 배경 */
+      color: #ffffff; /* 흰색 글자 */
+      line-height: 1.5;
+    }
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    /* 상단 배너(내비게이션) */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #001023;
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      order: 2; /* 로고를 오른쪽으로 이동 */
+    }
+    nav {
+      order: 1; /* 네비게이션을 왼쪽으로 이동 */
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+    nav li {
+      cursor: pointer;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    /* 스크롤 중에는 헤더가 위로 숨겨짐 */
+    header.hide {
+      transform: translateY(-100%);
+    }
+
+    /* 메인 비주얼 영역 */
+    .hero {
+      padding-top: 5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-small-title,
+    .hero-title,
+    .hero-subtitle {
+      align-self: flex-start;
+      width: 100%;
+    }
+
+    .hero-small-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .hero-title {
+      font-size: 4.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+      color: #b1b1b1;
+    }
+
+    .hero-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+      width: 100%;
+      text-align: left;
+    }
+
+    .feature-item {
+      text-align: left;
+    }
+
+    .feature-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .feature-desc {
+      font-size: 1.1rem;
+      color: #b1b1b1;
+      line-height: 1.6;
+    }
+
+    .email-form {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .email-form input[type="email"] {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #444;
+      background-color: transparent;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .email-form input[type="email"]::placeholder {
+      color: #fff; /* placeholder 색상을 흰색으로 변경 */
+      opacity: 1; /* placeholder 투명도를 100%로 설정 */
+    }
+
+    .email-form button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #18365B;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .email-form button:hover {
+      background-color: #234578;
+    }
+
+    /* 미리보기 섹션 */
+    .preview-section {
+      width: 100%;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .preview-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .preview-slider {
+      position: relative;
+      max-width: 1100px;
+      margin: 2rem auto 0;
+      overflow: visible;
+    }
+    .slide-container {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 1rem;
+      text-align: center;
+    }
+    .slide img {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #ccc;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      padding: 1rem;
+      cursor: pointer;
+      font-size: 1.5rem;
+      z-index: 10;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-prev {
+      left: 5px;
+    }
+    .btn-next {
+      right: 5px;
+    }
+    .slider-btn:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+
+    /* 사진 + 소개 섹션 */
+    .about-section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .about-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .my-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: #888;
+      margin: 0 auto 1rem;
+      /* 실제 이미지를 넣으려면 <img> 태그 사용 or background-image로 적용 */
+    }
+    .about-text {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+      color: #b1b1b1;
+    }
+
+    /* Contact Us 섹션 */
+    .contact-section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .contact-section h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .contact-form {
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      padding: 0.8rem;
+      border: 1px solid #444;
+      background-color: #001023;
+      color: #fff;
+    }
+    .contact-form button {
+      padding: 0.8rem;
+      background-color: #18365B;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    /* 푸터 */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* 모바일 반응형 스타일 추가 */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+        order: 1;
+      }
+      nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #001023;
+        padding: 1rem 0;
+      }
+      nav.active {
+        display: block;
+      }
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      nav li {
+        padding: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header id="mainHeader">
+  <div class="nav-content">
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav id="mainNav">
+      <ul>
+        <li>Home</li>
+        <li>Product</li>
+        <li>Trending</li>
+        <li>About Us</li>
+      </ul>
+    </nav>
+    <div class="nav-logo">IP-TREE</div>
+  </div>
+</header>
+
+<!-- 메인 히어로 영역 -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-small-title">세상에 없던 특허 기술분류 시스템</p>
+    <h1 class="hero-title">IP-TREE</h1>
+    <p class="hero-subtitle">
+      특허 데이터 기술분류와 노이즈 제거를 빠르게 처리해드립니다.
+    </p>
+    <div class="hero-features">
+      <div class="feature-item">
+        <h3 class="feature-title">기술분류기준을<br>클릭 한번으로 제시</h3>
+        <p class="feature-desc">클릭 한 번으로 기술분류 기준을 쉽고 빠르게 확인할 수 있습니다.</p>
+      </div>
+      <div class="feature-item">
+        <h3 class="feature-title">기술분류 동시에<br>노이즈 특허 자동 분류</h3>
+        <p class="feature-desc">기술분류와 함께 노이즈 특허를 자동으로 분류해드립니다.</p>
+      </div>
+      <div class="feature-item">
+        <h3 class="feature-title">검색결과 CSV 파일<br>바로 분류</h3>
+        <p class="feature-desc">CSV 파일을 업로드하면 즉시 분류 결과를 확인할 수 있습니다.</p>
+      </div>
+    </div>
+    <div class="email-form-container">
+      <form class="email-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeCp2OXM3CHPjCwf9jqxC05EmuZj9qVZ6vOItb00OGs0GGoSQ/viewform" method="GET" target="_blank">
+        <input type="email" name="entry.1588461970" placeholder="이메일을 입력 해주세요" required />
+        <button type="submit"> &#8251 가장 빠른 데모 알림 및 무료 테스트 기회 &#8251</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 미리보기 섹션 -->
+<section class="preview-section">
+  <h2>IP-TREE 서비스 미리보기</h2>
+  <p>※가장 빠른 데모 알림 및 무료 테스트 기회※</p>
+
+  <!-- 슬라이더 -->
+  <div class="preview-slider">
+    <button class="slider-btn btn-prev">&lt;</button>
+    <div class="slide-container" id="slideContainer">
+      <!-- 8장의 이미지 예시 (src를 원하는 것으로 바꾸세요) -->
+      <div class="slide">
+        <img src="./slideimage/7.png" alt="./slideimage/7.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/8.png" alt="./slideimage/8.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/9.png" alt="./slideimage/9.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/10.png" alt="./slideimage/10.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/11.png" alt="./slideimage/11.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/12.png" alt="./slideimage/12.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/13.png" alt="./slideimage/13.png">
+      </div>
+      <div class="slide">
+        <img src="./slideimage/14.png" alt="./slideimage/14.png">
+      </div>
+    </div>
+    <button class="slider-btn btn-next">&gt;</button>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 IP-TREE. All rights reserved by Matrixity.
+</footer>
+
+<script>
+  /* 
+    1) 스크롤할 때 헤더 숨기기 + 상단 영역에 마우스 커서를 올리면 나타나게 하기 
+  */
+  let lastScrollTop = 0;
+  const header = document.getElementById("mainHeader");
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > lastScrollTop) {
+      // 아래로 스크롤 시 헤더 숨김
+      header.classList.add("hide");
+    } else {
+      // 위로 스크롤 시 헤더 표시
+      header.classList.remove("hide");
+    }
+    lastScrollTop = currentScroll;
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (e.clientY < 10) {
+      header.classList.remove("hide");
+    }
+  });
+
+  /*
+    2) 미리보기 슬라이더 기능
+  */
+  const slideContainer = document.getElementById("slideContainer");
+  const slides = document.querySelectorAll(".slide");
+  const btnPrev = document.querySelector(".btn-prev");
+  const btnNext = document.querySelector(".btn-next");
+  let currentIndex = 0;
+
+  function updateSlider() {
+    const slideWidth = slides[0].clientWidth;
+    slideContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+  }
+
+  btnPrev.addEventListener("click", () => {
+    currentIndex = (currentIndex <= 0) ? slides.length - 1 : currentIndex - 1;
+    updateSlider();
+  });
+
+  btnNext.addEventListener("click", () => {
+    currentIndex = (currentIndex >= slides.length - 1) ? 0 : currentIndex + 1;
+    updateSlider();
+  });
+
+  /* 스크립트에 추가 */
+  function toggleMenu() {
+    const nav = document.getElementById('mainNav');
+    nav.classList.toggle('active');
+  }
+
+  const form = document.querySelector('.email-form');
+  form.addEventListener('submit', function(e) {
+    const email = e.target.querySelector('input[type="email"]').value;
+    // 이메일 입력값을 URL 파라미터로 추가
+    const url = `${form.action}?entry.1588461970=${encodeURIComponent(email)}`;
+    window.open(url, '_blank');
+    
+    // 기본 제출 동작 방지
+    e.preventDefault();
+    
+
+  });
+</script>
+
+</body>
+</html>
