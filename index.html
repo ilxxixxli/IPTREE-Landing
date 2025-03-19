@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>IP-TREE 특허 자동 기술분류 | IP Patent Classifier</title>
+  <title>IP-TREE 특허 자동 기술분류 IP patent classifier</title>
   <style>
     /* 전체 레이아웃 초기 스타일 */
     * {
@@ -334,19 +334,29 @@
     }
     
     /* 언어 전환 버튼 스타일 */
-    .language-switcher {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 5px 10px;
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #18365B;
+      color: white;
+      border: none;
+      padding: 8px 15px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 0.9rem;
+      z-index: 1000;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    
+    .lang-switch:hover {
+      background-color: #234578;
     }
   </style>
 </head>
 <body>
+
+<button id="langSwitch" class="lang-switch">English</button>
 
 <header id="mainHeader">
   <div class="nav-content">
@@ -357,10 +367,10 @@
     </div>
     <nav id="mainNav">
       <ul>
-        <li class="nav-home">Home</li>
-        <li class="nav-product">Product</li>
-        <li class="nav-trending">Trending</li>
-        <li class="nav-about">About Us</li>
+        <li id="nav-home">Home</li>
+        <li id="nav-product">Product</li>
+        <li id="nav-trending">Trending</li>
+        <li id="nav-about">About Us</li>
       </ul>
     </nav>
     <div class="nav-logo">IP-TREE</div>
@@ -370,29 +380,29 @@
 <!-- 메인 히어로 영역 -->
 <section class="hero">
   <div class="hero-content">
-    <p class="hero-small-title" data-ko="세상에 없던 특허 기술분류 시스템" data-en="Revolutionary Patent Classification System">세상에 없던 특허 기술분류 시스템</p>
+    <p class="hero-small-title" id="hero-small-title">세상에 없던 특허 기술분류 시스템</p>
     <h1 class="hero-title">IP-TREE</h1>
-    <p class="hero-subtitle" data-ko="특허 데이터 기술분류와 노이즈 제거를 빠르게 처리해드립니다." data-en="Quickly process patent data classification and noise removal.">
+    <p class="hero-subtitle" id="hero-subtitle">
       특허 데이터 기술분류와 노이즈 제거를 빠르게 처리해드립니다.
     </p>
     <div class="hero-features">
       <div class="feature-item">
-        <h3 class="feature-title" data-ko="기술분류기준을<br>클릭 한번으로 제시" data-en="One-click<br>Technology Classification">기술분류기준을<br>클릭 한번으로 제시</h3>
-        <p class="feature-desc" data-ko="클릭 한 번으로 기술분류 기준을 쉽고 빠르게 확인할 수 있습니다." data-en="Check technology classification criteria quickly and easily with just one click.">클릭 한 번으로 기술분류 기준을 쉽고 빠르게 확인할 수 있습니다.</p>
+        <h3 class="feature-title" id="feature-title-1">기술분류기준을<br>클릭 한번으로 제시</h3>
+        <p class="feature-desc" id="feature-desc-1">클릭 한 번으로 기술분류 기준을 쉽고 빠르게 확인할 수 있습니다.</p>
       </div>
       <div class="feature-item">
-        <h3 class="feature-title" data-ko="기술분류 동시에<br>노이즈 특허 자동 분류" data-en="Automatic Noise<br>Patent Classification">기술분류 동시에<br>노이즈 특허 자동 분류</h3>
-        <p class="feature-desc" data-ko="기술분류와 함께 노이즈 특허를 자동으로 분류해드립니다." data-en="Automatically classify noise patents along with technology classification.">기술분류와 함께 노이즈 특허를 자동으로 분류해드립니다.</p>
+        <h3 class="feature-title" id="feature-title-2">기술분류 동시에<br>노이즈 특허 자동 분류</h3>
+        <p class="feature-desc" id="feature-desc-2">기술분류와 함께 노이즈 특허를 자동으로 분류해드립니다.</p>
       </div>
       <div class="feature-item">
-        <h3 class="feature-title" data-ko="검색결과 CSV 파일<br>바로 분류" data-en="Instant Classification<br>of CSV Files">검색결과 CSV 파일<br>바로 분류</h3>
-        <p class="feature-desc" data-ko="CSV 파일을 업로드하면 즉시 분류 결과를 확인할 수 있습니다." data-en="Upload a CSV file and immediately check the classification results.">CSV 파일을 업로드하면 즉시 분류 결과를 확인할 수 있습니다.</p>
+        <h3 class="feature-title" id="feature-title-3">검색결과 CSV 파일<br>바로 분류</h3>
+        <p class="feature-desc" id="feature-desc-3">CSV 파일을 업로드하면 즉시 분류 결과를 확인할 수 있습니다.</p>
       </div>
     </div>
     <div class="email-form-container">
       <form class="email-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeCp2OXM3CHPjCwf9jqxC05EmuZj9qVZ6vOItb00OGs0GGoSQ/viewform" method="GET" target="_blank">
-        <input type="email" name="entry.1588461970" placeholder="" id="email-placeholder" required />
-        <button type="submit" id="email-button"></button>
+        <input type="email" name="entry.1588461970" placeholder="이메일을 입력 해주세요" id="email-placeholder" required />
+        <button type="submit" id="email-button"> &#8251; 가장 빠른 데모 알림 및 무료 테스트 기회 &#8251;</button>
       </form>
     </div>
   </div>
@@ -400,8 +410,8 @@
 
 <!-- 미리보기 섹션 -->
 <section class="preview-section">
-  <h2 id="preview-title"></h2>
-  <p id="preview-subtitle"></p>
+  <h2 id="preview-title">IP-TREE 서비스 미리보기</h2>
+  <p id="preview-subtitle">※가장 빠른 데모 알림 및 무료 테스트 기회※</p>
 
   <!-- 슬라이더 -->
   <div class="preview-slider">
@@ -437,93 +447,101 @@
   </div>
 </section>
 
-<footer id="footer-copyright">
+<footer id="footer-text">
+  &copy; 2025 IP-TREE. All rights reserved by Matrixity.
 </footer>
 
-<div class="language-switcher" id="language-toggle">KO / EN</div>
-
 <script>
-  /* 
-    언어 감지 및 변경 기능
-  */
+  // 언어 전환 관련 코드
   const translations = {
     ko: {
-      navHome: "홈",
-      navProduct: "제품",
-      navTrending: "트렌드",
-      navAbout: "회사 소개",
-      emailPlaceholder: "이메일을 입력 해주세요",
-      emailButton: "⭐ 가장 빠른 데모 알림 및 무료 테스트 기회 ⭐",
-      previewTitle: "IP-TREE 서비스 미리보기",
-      previewSubtitle: "※가장 빠른 데모 알림 및 무료 테스트 기회※",
-      footer: "&copy; 2025 IP-TREE. All rights reserved by Matrixity.",
-      languageToggle: "KO / EN"
-    },
-    en: {
+      langSwitch: "English",
       navHome: "Home",
       navProduct: "Product",
       navTrending: "Trending",
       navAbout: "About Us",
+      heroSmallTitle: "세상에 없던 특허 기술분류 시스템",
+      heroSubtitle: "특허 데이터 기술분류와 노이즈 제거를 빠르게 처리해드립니다.",
+      featureTitle1: "기술분류기준을<br>클릭 한번으로 제시",
+      featureDesc1: "클릭 한 번으로 기술분류 기준을 쉽고 빠르게 확인할 수 있습니다.",
+      featureTitle2: "기술분류 동시에<br>노이즈 특허 자동 분류",
+      featureDesc2: "기술분류와 함께 노이즈 특허를 자동으로 분류해드립니다.",
+      featureTitle3: "검색결과 CSV 파일<br>바로 분류",
+      featureDesc3: "CSV 파일을 업로드하면 즉시 분류 결과를 확인할 수 있습니다.",
+      emailPlaceholder: "이메일을 입력 해주세요",
+      emailButton: "&#8251; 가장 빠른 데모 알림 및 무료 테스트 기회 &#8251;",
+      previewTitle: "IP-TREE 서비스 미리보기",
+      previewSubtitle: "※가장 빠른 데모 알림 및 무료 테스트 기회※",
+      footerText: "&copy; 2025 IP-TREE. All rights reserved by Matrixity."
+    },
+    en: {
+      langSwitch: "한국어",
+      navHome: "Home",
+      navProduct: "Product",
+      navTrending: "Trending",
+      navAbout: "About Us",
+      heroSmallTitle: "Revolutionary Patent Classification System",
+      heroSubtitle: "Quick processing of patent data classification and noise removal.",
+      featureTitle1: "One-click<br>Technology Classification",
+      featureDesc1: "Check technology classification criteria quickly and easily with just one click.",
+      featureTitle2: "Automatic Noise<br>Patent Classification",
+      featureDesc2: "Automatically classify noise patents along with technology classification.",
+      featureTitle3: "Instant Classification<br>of CSV Files",
+      featureDesc3: "Upload a CSV file and immediately check the classification results.",
       emailPlaceholder: "Enter your email",
-      emailButton: "⭐ Get demo alerts and free trial opportunity ⭐",
+      emailButton: "&#8251; Get fastest demo alerts and free trial opportunity &#8251;",
       previewTitle: "IP-TREE Service Preview",
       previewSubtitle: "※Get the fastest demo alerts and free test opportunity※",
-      footer: "&copy; 2025 IP-TREE. All rights reserved by Matrixity.",
-      languageToggle: "EN / KO"
+      footerText: "&copy; 2025 IP-TREE. All rights reserved by Matrixity."
     }
   };
 
-  // 브라우저 언어 감지
-  function detectLanguage() {
-    const browserLang = navigator.language || navigator.userLanguage;
-    return browserLang.startsWith('en') ? 'en' : 'ko';
+  // 현재 언어 상태 (기본값 한국어)
+  let currentLang = 'ko';
+
+  // 언어 변경 함수
+  function switchLanguage() {
+    // 언어 토글
+    currentLang = currentLang === 'ko' ? 'en' : 'ko';
+    
+    // 버튼 텍스트 변경
+    document.getElementById('langSwitch').textContent = translations[currentLang].langSwitch;
+    
+    // 네비게이션 아이템 변경
+    document.getElementById('nav-home').textContent = translations[currentLang].navHome;
+    document.getElementById('nav-product').textContent = translations[currentLang].navProduct;
+    document.getElementById('nav-trending').textContent = translations[currentLang].navTrending;
+    document.getElementById('nav-about').textContent = translations[currentLang].navAbout;
+    
+    // 히어로 섹션 텍스트 변경
+    document.getElementById('hero-small-title').textContent = translations[currentLang].heroSmallTitle;
+    document.getElementById('hero-subtitle').textContent = translations[currentLang].heroSubtitle;
+    
+    // 특징 섹션 텍스트 변경
+    document.getElementById('feature-title-1').innerHTML = translations[currentLang].featureTitle1;
+    document.getElementById('feature-desc-1').textContent = translations[currentLang].featureDesc1;
+    document.getElementById('feature-title-2').innerHTML = translations[currentLang].featureTitle2;
+    document.getElementById('feature-desc-2').textContent = translations[currentLang].featureDesc2;
+    document.getElementById('feature-title-3').innerHTML = translations[currentLang].featureTitle3;
+    document.getElementById('feature-desc-3').textContent = translations[currentLang].featureDesc3;
+    
+    // 이메일 폼 텍스트 변경
+    document.getElementById('email-placeholder').placeholder = translations[currentLang].emailPlaceholder;
+    document.getElementById('email-button').innerHTML = translations[currentLang].emailButton;
+    
+    // 미리보기 섹션 텍스트 변경
+    document.getElementById('preview-title').textContent = translations[currentLang].previewTitle;
+    document.getElementById('preview-subtitle').textContent = translations[currentLang].previewSubtitle;
+    
+    // 푸터 텍스트 변경
+    document.getElementById('footer-text').innerHTML = translations[currentLang].footerText;
   }
-
-  // 저장된 언어 설정 가져오기 또는 브라우저 언어로 기본 설정
-  let currentLang = localStorage.getItem('language') || detectLanguage();
-
-  // 언어 설정 함수
-  function setLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('language', lang);
-    
-    // 네비게이션 항목 갱신
-    document.querySelector('.nav-home').textContent = translations[lang].navHome;
-    document.querySelector('.nav-product').textContent = translations[lang].navProduct;
-    document.querySelector('.nav-trending').textContent = translations[lang].navTrending;
-    document.querySelector('.nav-about').textContent = translations[lang].navAbout;
-    
-    // 이메일 폼 갱신
-    document.getElementById('email-placeholder').placeholder = translations[lang].emailPlaceholder;
-    document.getElementById('email-button').textContent = translations[lang].emailButton;
-    
-    // 미리보기 섹션 갱신
-    document.getElementById('preview-title').textContent = translations[lang].previewTitle;
-    document.getElementById('preview-subtitle').textContent = translations[lang].previewSubtitle;
-    
-    // 푸터 갱신
-    document.getElementById('footer-copyright').innerHTML = translations[lang].footer;
-    
-    // 언어 토글 버튼 갱신
-    document.getElementById('language-toggle').textContent = translations[lang].languageToggle;
-    
-    // data-ko/data-en 속성을 가진 모든 요소 갱신
-    document.querySelectorAll('[data-ko][data-en]').forEach(el => {
-      el.textContent = el.getAttribute(`data-${lang}`);
-    });
-  }
-
-  // 언어 토글 버튼 이벤트
-  document.getElementById('language-toggle').addEventListener('click', () => {
-    const newLang = currentLang === 'ko' ? 'en' : 'ko';
-    setLanguage(newLang);
-  });
-
-  // 초기 언어 설정 적용
-  setLanguage(currentLang);
+  
+  // 언어 전환 버튼에 이벤트 리스너 추가
+  document.getElementById('langSwitch').addEventListener('click', switchLanguage);
 
   /* 
-    스크롤할 때 헤더 숨기기 + 상단 영역에 마우스 커서를 올리면 나타나게 하기 
+    1) 스크롤할 때 헤더 숨기기 + 상단 영역에 마우스 커서를 올리면 나타나게 하기 
   */
   let lastScrollTop = 0;
   const header = document.getElementById("mainHeader");
@@ -547,7 +565,7 @@
   });
 
   /*
-    미리보기 슬라이더 기능
+    2) 미리보기 슬라이더 기능
   */
   const slideContainer = document.getElementById("slideContainer");
   const slides = document.querySelectorAll(".slide");
@@ -587,12 +605,12 @@
     // 기본 제출 동작 방지
     e.preventDefault();
   });
-
-  // 화면 크기 조정 시 슬라이더 업데이트
-  window.addEventListener('resize', updateSlider);
-
-  // 슬라이더 초기화
-  window.addEventListener('load', updateSlider);
+  
+  // 화면 크기 변경 시 슬라이더 업데이트
+  window.addEventListener("resize", updateSlider);
+  
+  // 페이지 로드 시 슬라이더 초기화
+  window.addEventListener("load", updateSlider);
 </script>
 
 </body>
